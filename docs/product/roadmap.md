@@ -5,7 +5,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 **First slice:** phases 1–3, which take the stack from a clean clone to the users table passing end to end.
 
 ## Phase 1: Foundation
-- [ ] S: uv project on Python 3.14 with a FastAPI `/health` route
+- [x] S: uv project on Python 3.14 with a FastAPI `/health` route
 - [ ] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
 - [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest
 - [ ] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
