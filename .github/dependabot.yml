@@ -5,3 +5,6 @@ updates:
     directory: /
     schedule:
       interval: weekly
+    # Only propose releases at least two weeks old, the same rule as the original pins.
+    cooldown:
+      default-days: 14
