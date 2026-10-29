@@ -16,7 +16,7 @@ Spec: [spec.md](spec.md)
       non-zero (AC 3).
 - [x] 7. Update `docs/product/tech-stack.md` (SHA pinning, Dependabot, the exact command) and
       tick the item in `docs/product/roadmap.md`.
-- [ ] 8. After the push, the PR's `check` run is green with six separate steps (AC 4).
+- [x] 8. After the push, the PR's `check` run is green with six separate steps (AC 4).
 
 This item has no access check, so it needs no passing/negative test pair beyond the negative
 checks in AC 3. It has no support drill, so it needs no runbook task.
@@ -38,5 +38,6 @@ checks in AC 3. It has no support drill, so it needs no runbook task.
 - AC 3: all six negative checks exited 1 and were reverted. They were an unused import, a
   misformatted line, an untyped `def`, a failing assert, `"rich"` added without `uv lock`, and
   `jinja2==3.1.2` (10 known vulnerabilities).
+- AC 4: the `check` run on PR #9 was green (confirmed by the user).
 - No Keycloak, `.env` or `/api/*` changes, and the realms aren't wired up yet. So `make reset`
   and the alice/carol e2e login (build-spec step 4) don't apply to this item.
