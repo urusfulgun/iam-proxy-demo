@@ -7,7 +7,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 ## Phase 1: Foundation
 - [x] S: uv project on Python 3.14 with a FastAPI `/health` route
 - [ ] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
-- [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest
+- [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest, pip-audit on `uv.lock`
 - [ ] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
 - [ ] M: `docker-compose.yml`: postgres, keycloak (alias `auth.localhost`, bootstrap admin from `.env`, healthcheck on `:9000/health/ready`), one-shot keycloak-config, app
 - [ ] S: Makefile targets `init`, `apply`, `reset`, `export`, `up`, `down`, `logs`
@@ -50,3 +50,4 @@ Each drill is a failing test or a reproducible break, with a runbook in `docs/ru
 - [ ] S: Onboarding guide for a new service operator
 - [ ] L: DPoP-bound tokens (RFC 9449)
 - [ ] M: Single logout
+- [ ] S: Trivy scan of the app image in CI (HIGH/CRITICAL, `--ignore-unfixed`, action pinned by commit SHA)
