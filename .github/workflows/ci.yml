@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      # Same interpreter as the devcontainer.
+      UV_PYTHON: "3.14.8"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: astral-sh/setup-uv@1c37ad07a6a961277cf70c0d37d6f313000f5884 # v10.3.0
+        with:
+          # Same uv as the Dockerfile.
+          version: "0.13.6"
+          enable-cache: true
+
+      - name: Sync (fails if uv.lock is stale)
+        run: uv sync --locked
+
+      - name: Lint
+        run: uv run ruff check
+
+      - name: Format
+        run: uv run ruff format --check
+
+      - name: Type-check
+        run: uv run mypy
+
+      - name: Test
+        run: uv run pytest
+
+      # pip-audit rejects `-r -`, hence /dev/stdin. --no-emit-project drops `-e .`.
+      - name: Audit dependencies
+        run: >-
+          uv export --locked --format requirements-txt --no-hashes --no-emit-project
+          | uvx pip-audit==2.10.1 -r /dev/stdin --no-deps --strict

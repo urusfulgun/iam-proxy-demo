@@ -59,7 +59,12 @@ Versions current as of 2026-10-29. Python packages are pinned in `uv.lock`, imag
 - **Version:** ruff 0.17, mypy 2.4, pinned in the `dev` dependency group
 - **Why:** Pinning them in the dev group means `uv run` uses the venv binaries, so mypy sees the project's packages and CI runs the same versions. The devcontainer also installs both globally for VS Code (format on save, strict mypy). Strict typing catches claim-handling mistakes early.
 
+## CI: GitHub Actions
+- **What:** `.github/workflows/ci.yml`, one job `check` on every push to `main` and every pull request: `uv sync --locked`, `ruff check`, `ruff format --check`, `mypy`, `pytest` and pip-audit, each as its own step. It uses the same Python (3.14.8) as the devcontainer and the same uv (0.13.6) as the Dockerfile.
+- **Version:** `actions/checkout` v7.0.1 and `astral-sh/setup-uv` v10.3.0, pinned by full commit SHA. Dependabot (`.github/dependabot.yml`, `github-actions`, weekly) bumps the SHA and its version comment together.
+- **Why:** CI runs the same commands as CLAUDE.md, so a green local run predicts a green CI run. `--locked` fails on a stale `uv.lock` instead of silently re-resolving it. A SHA can't be moved the way a tag can, and Dependabot keeps the pins from going stale.
+
 ## Dependency audit: pip-audit
-- **What:** A blocking CI step that checks the locked dependencies against known vulnerabilities: `uv export --format requirements-txt --no-hashes | uvx pip-audit -r - --no-deps`
-- **Version:** Run via `uvx`; the exact version is pinned in the CI workflow
+- **What:** A blocking CI step that checks the locked dependencies against known vulnerabilities: `uv export --locked --format requirements-txt --no-hashes --no-emit-project | uvx pip-audit==2.10.1 -r /dev/stdin --no-deps --strict`. pip-audit rejects `-r -`, so it reads `/dev/stdin`. `--no-emit-project` drops the `-e .` line for the local project, and `--strict` fails rather than skipping a package it can't audit.
+- **Version:** pip-audit 2.10.1, run via `uvx` and pinned in the CI workflow
 - **Why:** The app's security rests on PyJWT, `cryptography` and Starlette, so a CVE in any of them matters. The dependency set is small, so the step takes seconds and rarely fails on something that isn't real. Image scanning (Trivy) waits until there is an app image: the upstream Keycloak and Postgres images are pinned and their findings can't be fixed here.
