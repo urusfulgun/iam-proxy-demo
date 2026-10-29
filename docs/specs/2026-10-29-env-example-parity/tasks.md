@@ -15,7 +15,7 @@ Spec: [spec.md](spec.md)
       with the variable name and no secret value (AC 3).
 - [x] 7. Update `docs/product/tech-stack.md` (CI section) and tick the item in
       `docs/product/roadmap.md`.
-- [ ] 8. After the push, the PR's `check` run is green, with the local-parity test skipped
+- [x] 8. After the push, the PR's `check` run is green, with the local-parity test skipped
       (AC 4).
 
 This item has no access check, so it needs no passing/negative API test pair beyond the negative
@@ -37,5 +37,7 @@ checks in AC 2 and AC 3. It has no support drill, so it needs no runbook task.
 - AC 3: all five manual checks exited 1, named the variable (FOO, BAR, BAZ, POSTGRES_PASSWORD) or
   ".env is tracked", and were reverted. A grep of each output for every value in `.env` found
   nothing.
+- AC 4: the `check` run on PR #14 was green, with the local-parity test skipped (confirmed by
+  the user).
 - No Keycloak, `.env` or `/api/*` changes, and the realms aren't wired up yet. So `make reset`
   and the alice/carol e2e login (build-spec step 4) don't apply to this item.
