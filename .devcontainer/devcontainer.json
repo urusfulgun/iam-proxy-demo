@@ -1,6 +1,8 @@
 {
     "name": "IAM Proxy Demo + Claude Code",
     "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    // Runs on the host before the container is created, so the network in runArgs exists.
+    "initializeCommand": "docker network create iam-proxy-demo-network 2>/dev/null || true",
     "runArgs": [
         "--network=iam-proxy-demo-network",
         "--network-alias=devcontainer" // Optional: gives your dev container a predictable hostname
