@@ -19,15 +19,16 @@ and a `uv.lock` with no packages. There is no Makefile, `docker-compose.yml`, re
 - **`/health` is liveness only.** It makes no call to Keycloak, so the app container's
   healthcheck never depends on Keycloak. Keycloak readiness is checked separately on
   `http://keycloak:9000/health/ready`.
-- **Test tooling is minimal:** a `dev` dependency group with pytest and httpx (which
-  `TestClient` needs), plus one test file. `[tool.pytest]`, `[tool.ruff]` and `[tool.mypy]`
+- **Test tooling is minimal:** a `dev` dependency group with pytest and httpx2 (which
+  `TestClient` needs), plus one test file. httpx2 replaces httpx 0.28.1, which Starlette 1.10's
+  `TestClient` deprecates; `tech-stack.md` now uses httpx2 everywhere. `[tool.pytest]`, `[tool.ruff]` and `[tool.mypy]`
   config belongs to the next roadmap item.
 
 ## Scope
 - `pyproject.toml`
   - `description`: a real one-line description, replacing "Add your description here"
   - `dependencies`: `fastapi>=0.162,<0.163`, `uvicorn>=0.54,<0.55`
-  - `[dependency-groups]` `dev = ["pytest>=9.2,<10", "httpx==0.28.1"]`
+  - `[dependency-groups]` `dev = ["pytest>=9.2,<10", "httpx2==2.16.0"]`
   - `requires-python = ">=3.14"` stays as it is
 - `src/iam_proxy_demo/app.py`: `app = FastAPI(title="aloysius-app")` and `GET /health`
   returning `{"status": "ok"}` with a typed return value
@@ -44,7 +45,7 @@ and a `uv.lock` with no packages. There is no Makefile, `docker-compose.yml`, re
 
 ## Acceptance criteria
 1. `uv sync` succeeds on Python 3.14, and `uv.lock` pins fastapi 0.162.x, uvicorn 0.54.x,
-   pytest 9.2.x and httpx 0.28.1.
+   pytest 9.2.x and httpx2 2.16.0.
 2. `uv run pytest` passes:
    - `GET /health` returns 200 with body `{"status": "ok"}`
    - `POST /health` returns 405 (negative test)

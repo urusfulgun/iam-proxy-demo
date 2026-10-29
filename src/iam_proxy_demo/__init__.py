@@ -1,2 +1,5 @@
+import uvicorn
+
+
 def main() -> None:
-    print("Hello from iam-proxy-demo!")
+    uvicorn.run("iam_proxy_demo.app:app", host="0.0.0.0", port=8000)

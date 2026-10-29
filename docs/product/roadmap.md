@@ -5,7 +5,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 **First slice:** phases 1–3, which take the stack from a clean clone to the users table passing end to end.
 
 ## Phase 1: Foundation
-- [ ] S: uv project on Python 3.14 with a FastAPI `/health` route
+- [x] S: uv project on Python 3.14 with a FastAPI `/health` route
 - [ ] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
 - [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest
 - [ ] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
@@ -18,7 +18,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 - [ ] L: aloysius brokers home-fau over SAML: trusts the pinned cert, persistent NameID, signature validation on, attribute importer mappers
 - [ ] S: OIDC client `aloysius-app` with PKCE S256 required and an exact redirect URI
 - [ ] M: FastAPI `/login`, `/callback` (state, nonce, PKCE) and `/whoami` printing the claims
-- [ ] M: Scripted httpx e2e login through both hops (alice via home-fau)
+- [ ] M: Scripted httpx2 e2e login through both hops (alice via home-fau)
 - [ ] M: home-bamberg as a second SAML IdP, brokered the same way
 - [ ] S: IdP chooser and `kc_idp_hint` via `/login?idp=`
 
