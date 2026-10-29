@@ -1,4 +1,29 @@
 {
   "realm": "home-bamberg",
-  "enabled": true
+  "enabled": true,
+  "components": {
+    "org.keycloak.keys.KeyProvider": [
+      {
+        "name": "home-bamberg-saml-signing",
+        "providerId": "rsa",
+        "subComponents": {},
+        "config": {
+          "priority": ["200"],
+          "enabled": ["true"],
+          "active": ["true"],
+          "algorithm": ["RS256"],
+          "privateKey": ["$(env:HOME_BAMBERG_SAML_PRIVATE_KEY)"],
+          "certificate": ["$(env:HOME_BAMBERG_SAML_CERT)"]
+        }
+      },
+      {
+        "name": "rsa-generated",
+        "providerId": "rsa-generated",
+        "subComponents": {},
+        "config": {
+          "enabled": ["false"]
+        }
+      }
+    ]
+  }
 }

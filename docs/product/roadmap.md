@@ -11,7 +11,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 - [x] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
 - [x] M: `docker-compose.yml`: postgres, keycloak (`auth.localhost` via host-gateway, bootstrap admin from `.env`, healthcheck on `:9000/health/ready`), one-shot keycloak-config, app
 - [x] S: Makefile targets `init`, `apply`, `reset`, `export`, `up`, `down`, `logs`
-- [ ] M: Three realm files in `keycloak/realms/`; home realms with pinned demo keypairs (private keys via `.env`)
+- [x] M: Three realm files in `keycloak/realms/`; home realms with pinned demo keypairs (private keys via `.env`)
 
 ## Phase 2: Federation core
 - [ ] M: home-fau as SAML IdP: signed assertions; ePPN, ePSA and schacHomeOrganization mappers (`urn:oid`, URI format), declared in the user profile

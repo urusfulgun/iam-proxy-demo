@@ -18,6 +18,7 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "cryptography==50.0.2",
     "httpx2==2.16.0",
     "mypy>=2.4,<2.5",
     "pytest>=9.2,<10",
@@ -28,6 +29,7 @@ dev = [
 testpaths = ["tests"]
 strict = true
 filterwarnings = ["error"]
+markers = ["e2e: needs the running stack; skipped when Keycloak doesn't answer"]
 
 [tool.mypy]
 python_version = "3.14"
