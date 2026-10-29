@@ -30,7 +30,7 @@ Spec: [spec.md](spec.md)
 - [x] 10. Run `make reset`, then rerun the e2e tests (AC 6).
 - [x] 11. Update `docs/product/tech-stack.md` (demo password, `make secrets`, `tests/saml.py`,
       user-profile format if task 1 changed it), then tick the item in `docs/product/roadmap.md`.
-- [ ] 12. After the push, the PR's `check` run is green, with the `e2e` and local-`.env` tests
+- [x] 12. After the push, the PR's `check` run is green, with the `e2e` and local-`.env` tests
       skipped (AC 7).
 
 Access checks in this item, each with a passing test and a negative test:
@@ -90,3 +90,5 @@ login through home-fau is the closest check.
 - **Build-spec step 4** (alice via home-fau, carol via home-bamberg, `/api/*`) doesn't apply yet:
   there is no broker, no home-bamberg user and no `/api/*` route. alice's direct SP-initiated
   login against home-fau (AC 2) is the closest check, and it passes.
+- **AC 7:** the `check` run on PR #20 was green, with the `e2e` and local-`.env` tests skipped
+  (confirmed by the user).
