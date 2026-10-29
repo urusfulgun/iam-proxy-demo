@@ -37,20 +37,20 @@ Versions current as of 2026-10-29. Python packages are pinned in `uv.lock`, imag
 - **Version:** Keycloak `rsa` key provider and SAML IdP settings; keys generated with `openssl`
 - **Why:** The keys survive `make reset`, and the trust relationship is explicit in the config. The rotation drill can change the home key without changing the broker's trusted cert and get a real signature failure. A metadata descriptor URL would refetch the new key automatically and hide that failure. The private keys live only in `.env`.
 
-## OIDC client: httpx + PyJWT
-- **What:** Hand-rolled authorization code flow with PKCE (S256). httpx makes the token request, and PyJWT validates the ID token and access tokens (`algorithms=["RS256"]`; `iss`, `aud`, `exp` and `typ` required). State, nonce and verifier live in a signed session cookie (Starlette `SessionMiddleware`).
-- **Version:** httpx 0.28.1, PyJWT 2.15.1 with `cryptography` 50.0.2 (pure-Python and abi3 wheels, which install on 3.14)
-- **Why:** About 60 lines where every step and check is visible and can cite OIDC Core or RFC 7636 in a comment. A teaching demo should show these steps; authlib would hide them.
+## OIDC client: httpx2 + PyJWT
+- **What:** Hand-rolled authorization code flow with PKCE (S256). httpx2 makes the token request, and PyJWT validates the ID token and access tokens (`algorithms=["RS256"]`; `iss`, `aud`, `exp` and `typ` required). State, nonce and verifier live in a signed session cookie (Starlette `SessionMiddleware`).
+- **Version:** httpx2 2.16.0, PyJWT 2.15.1 with `cryptography` 50.0.2 (pure-Python and abi3 wheels, which install on 3.14)
+- **Why:** About 60 lines where every step and check is visible and can cite OIDC Core or RFC 7636 in a comment. A teaching demo should show these steps; authlib would hide them. httpx2 is Pydantic's successor to httpx; Starlette uses it as a drop-in (`import httpx2 as httpx`). Starlette 1.10's `TestClient` deprecates httpx in its favour, so one HTTP client serves the app, the unit tests and the e2e scripts.
 
 ## JWKS fetching and caching: PyJWKClient
 - **What:** One module-level `PyJWKClient` for `http://auth.localhost:8080/realms/aloysius/protocol/openid-connect/certs`. It caches keys in-process with a TTL, selects by `kid`, and refetches once on an unknown `kid`.
 - **Version:** Built into PyJWT 2.15.1
 - **Why:** Handles key rotation without a restart and without a network call on every request. No extra dependency.
 
-## Testing: pytest, locally signed tokens, scripted httpx login
+## Testing: pytest, locally signed tokens, scripted httpx2 login
 - **What:**
   - *Unit tests:* tokens signed with a test RSA key, and the JWKS client patched to return that key. Every access check gets a passing test and a negative test.
-  - *End-to-end tests (against the running stack):* scripted httpx clients follow `/login`, parse each auto-submit form (`SAMLRequest`, `SAMLResponse`, `RelayState`), POST it on, and submit the home realm login form. They log in alice, bob, carol and dave, then compare `/api/*` status codes to the users table.
+  - *End-to-end tests (against the running stack):* scripted httpx2 clients follow `/login`, parse each auto-submit form (`SAMLRequest`, `SAMLResponse`, `RelayState`), POST it on, and submit the home realm login form. They log in alice, bob, carol and dave, then compare `/api/*` status codes to the users table.
 - **Version:** pytest 9.2
 - **Why:** No browser download. Each SAML and OIDC hop is an explicit step in the test, so the test reads like the flow diagram and runs in seconds.
 

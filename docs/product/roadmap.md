@@ -18,7 +18,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 - [ ] L: aloysius brokers home-fau over SAML: trusts the pinned cert, persistent NameID, signature validation on, attribute importer mappers
 - [ ] S: OIDC client `aloysius-app` with PKCE S256 required and an exact redirect URI
 - [ ] M: FastAPI `/login`, `/callback` (state, nonce, PKCE) and `/whoami` printing the claims
-- [ ] M: Scripted httpx e2e login through both hops (alice via home-fau)
+- [ ] M: Scripted httpx2 e2e login through both hops (alice via home-fau)
 - [ ] M: home-bamberg as a second SAML IdP, brokered the same way
 - [ ] S: IdP chooser and `kc_idp_hint` via `/login?idp=`
 

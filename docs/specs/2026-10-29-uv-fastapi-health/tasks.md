@@ -2,7 +2,7 @@
 
 Spec: [spec.md](spec.md)
 
-- [x] 1. Add `fastapi` and `uvicorn` to `dependencies` and a `dev` group (`pytest`, `httpx`) to
+- [x] 1. Add `fastapi` and `uvicorn` to `dependencies` and a `dev` group (`pytest`, `httpx2`) to
       `pyproject.toml`, and set the description. Run `uv lock && uv sync`, then check the pinned
       versions in `uv.lock` (AC 1).
 - [x] 2. Write `tests/test_health.py` with `test_health_ok` (200, `{"status": "ok"}`) and
@@ -25,4 +25,5 @@ drill, so it needs no runbook task.
   The next item (mypy config in `pyproject.toml`) should set `python_executable = ".venv/bin/python"`
   or run mypy from the dev group.
 - Starlette 1.10 (pulled in by FastAPI 0.162) warns that `TestClient` with `httpx` is deprecated
-  in favour of `httpx2`. The tests pass. Revisit when the test tooling is configured.
+  in favour of `httpx2`. Resolved: the dev group now pins `httpx2==2.16.0` instead of
+  `httpx==0.28.1`, and the tests run clean with `-W error::DeprecationWarning`.
