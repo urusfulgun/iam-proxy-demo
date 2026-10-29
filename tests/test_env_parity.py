@@ -28,6 +28,11 @@ def referenced_vars(text: str) -> set[str]:
     return set(_COMPOSE_REF.findall(text)) | set(_CONFIG_CLI_REF.findall(text))
 
 
+def realm_vars(text: str) -> set[str]:
+    """Realm files: config-cli substitutes only `$(env:…)`; `${…}` is a message key."""
+    return set(_CONFIG_CLI_REF.findall(text))
+
+
 def drift(documented: set[str], other: set[str], where: str) -> str:
     """Empty if `.env.example` and `where` list the same names, else names each side."""
     lines = []
@@ -76,6 +81,11 @@ def test_referenced_vars_ignores_escape_and_bare_form() -> None:
     assert referenced_vars("$${A} $B $(B) plain") == set()
 
 
+def test_realm_vars_ignore_keycloak_message_keys() -> None:
+    # `${username}` in a realm file is a Keycloak i18n key, not a variable.
+    assert realm_vars('"${username}" "$(env:A)"') == {"A"}
+
+
 def test_drift_none_when_equal() -> None:
     assert drift({"A"}, {"A"}, "config") == ""
 
@@ -95,11 +105,10 @@ def test_drift_reports_local_env_missing_and_extra_key() -> None:
 
 
 def test_env_example_matches_referenced_vars() -> None:
-    sources = [
-        ROOT / "docker-compose.yml",
-        *sorted((ROOT / "keycloak/realms").glob("*.json")),
-    ]
-    used = set().union(*(referenced_vars(path.read_text()) for path in sources))
+    realms = sorted((ROOT / "keycloak/realms").glob("*.json"))
+    used = referenced_vars((ROOT / "docker-compose.yml").read_text()).union(
+        *(realm_vars(path.read_text()) for path in realms)
+    )
     assert used, "no references found; did a source file move?"
     message = drift(
         set(env_keys(EXAMPLE.read_text())),

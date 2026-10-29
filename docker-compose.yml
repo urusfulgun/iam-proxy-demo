@@ -59,6 +59,8 @@ services:
       HOME_FAU_SAML_CERT: ${HOME_FAU_SAML_CERT:?set in .env}
       HOME_BAMBERG_SAML_PRIVATE_KEY: ${HOME_BAMBERG_SAML_PRIVATE_KEY:?set in .env}
       HOME_BAMBERG_SAML_CERT: ${HOME_BAMBERG_SAML_CERT:?set in .env}
+      # Demo users' password, substituted into their credentials.
+      DEMO_USER_PASSWORD: ${DEMO_USER_PASSWORD:?set in .env}
     depends_on:
       keycloak:
         condition: service_healthy

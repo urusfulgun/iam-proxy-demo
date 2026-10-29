@@ -14,7 +14,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 - [x] M: Three realm files in `keycloak/realms/`; home realms with pinned demo keypairs (private keys via `.env`)
 
 ## Phase 2: Federation core
-- [ ] M: home-fau as SAML IdP: signed assertions; ePPN, ePSA and schacHomeOrganization mappers (`urn:oid`, URI format), declared in the user profile
+- [x] M: home-fau as SAML IdP: signed assertions; ePPN, ePSA and schacHomeOrganization mappers (`urn:oid`, URI format), declared in the user profile
 - [ ] L: aloysius brokers home-fau over SAML: trusts the pinned cert, persistent NameID, signature validation on, attribute importer mappers
 - [ ] S: OIDC client `aloysius-app` with PKCE S256 required and an exact redirect URI
 - [ ] M: FastAPI `/login`, `/callback` (state, nonce, PKCE) and `/whoami` printing the claims
