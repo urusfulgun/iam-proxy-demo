@@ -9,8 +9,8 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 - [x] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
 - [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest, pip-audit on `uv.lock`
 - [ ] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
-- [ ] M: `docker-compose.yml`: postgres, keycloak (alias `auth.localhost`, bootstrap admin from `.env`, healthcheck on `:9000/health/ready`), one-shot keycloak-config, app
-- [ ] S: Makefile targets `init`, `apply`, `reset`, `export`, `up`, `down`, `logs`
+- [x] M: `docker-compose.yml`: postgres, keycloak (`auth.localhost` via host-gateway, bootstrap admin from `.env`, healthcheck on `:9000/health/ready`), one-shot keycloak-config, app
+- [x] S: Makefile targets `init`, `apply`, `reset`, `export`, `up`, `down`, `logs`
 - [ ] M: Three realm files in `keycloak/realms/`; home realms with pinned demo keypairs (private keys via `.env`)
 
 ## Phase 2: Federation core

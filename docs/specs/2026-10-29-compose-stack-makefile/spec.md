@@ -100,7 +100,8 @@ has applied three stub realms. After that:
 
 ## Acceptance criteria
 1. **Resolution (devcontainer):** after the devcontainer is rebuilt,
-   `getent hosts auth.localhost` in it returns the host-gateway IP, not loopback.
+   `getent ahosts auth.localhost` in it returns only the host-gateway IP, not loopback.
+   (`getent hosts` asks for IPv6 only and still shows `::1`; see the build notes.)
 2. **Clean start:** with no `.env` and no volumes, `make init` exits 0.
    - `.env` has non-empty random values for both passwords.
    - `docker compose ps` shows postgres, keycloak and app healthy, and keycloak-config exited with code 0.

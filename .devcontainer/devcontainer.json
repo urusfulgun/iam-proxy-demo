@@ -5,7 +5,9 @@
     "initializeCommand": "docker network create iam-proxy-demo-network 2>/dev/null || true",
     "runArgs": [
         "--network=iam-proxy-demo-network",
-        "--network-alias=devcontainer" // Optional: gives your dev container a predictable hostname
+        "--network-alias=devcontainer", // Optional: gives your dev container a predictable hostname
+        // Keycloak's published port on the host, so the back channel uses the same issuer as the browser.
+        "--add-host=auth.localhost:host-gateway"
     ],
     "features": {
         "ghcr.io/devcontainers/features/node:1": {
@@ -70,10 +72,8 @@
             }
         }
     },
-    // Forward ports if you run a dev server (adjust as needed)
-    "forwardPorts": [
-        8000
-    ],
+    // No forwardPorts: compose publishes Keycloak (8080) and the app (8000) on the host
+    // directly, and a VS Code forward would hold the same host port.
     // Uncomment to run as non-root (recommended for production-like setups)
     "remoteUser": "vscode",
     // Creates .venv so the workspace is usable straight after a rebuild,
