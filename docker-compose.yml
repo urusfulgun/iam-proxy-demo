@@ -54,6 +54,11 @@ services:
       KEYCLOAK_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD:?set in .env}
       IMPORT_FILES_LOCATIONS: /config/*
       IMPORT_VARSUBSTITUTION_ENABLED: "true"
+      # Pinned home signing keys, substituted into the home realm files.
+      HOME_FAU_SAML_PRIVATE_KEY: ${HOME_FAU_SAML_PRIVATE_KEY:?set in .env}
+      HOME_FAU_SAML_CERT: ${HOME_FAU_SAML_CERT:?set in .env}
+      HOME_BAMBERG_SAML_PRIVATE_KEY: ${HOME_BAMBERG_SAML_PRIVATE_KEY:?set in .env}
+      HOME_BAMBERG_SAML_CERT: ${HOME_BAMBERG_SAML_CERT:?set in .env}
     depends_on:
       keycloak:
         condition: service_healthy

@@ -9,30 +9,19 @@ from pathlib import Path
 
 import pytest
 
+from tests.envfile import KEY, parse_env
+
 ROOT = Path(__file__).resolve().parent.parent
 EXAMPLE = ROOT / ".env.example"
 
-_KEY = re.compile(r"[A-Za-z_][A-Za-z0-9_]*")
 # Compose: ${NAME}, ${NAME:?msg}, ${NAME:-default}, ... but not the $${...} escape.
-_COMPOSE_REF = re.compile(r"(?<!\$)\$\{(" + _KEY.pattern + ")")
+_COMPOSE_REF = re.compile(r"(?<!\$)\$\{(" + KEY.pattern + ")")
 # keycloak-config-cli: $(env:NAME) and $(env:NAME:-default).
-_CONFIG_CLI_REF = re.compile(r"\$\(env:(" + _KEY.pattern + ")")
+_CONFIG_CLI_REF = re.compile(r"\$\(env:(" + KEY.pattern + ")")
 
 
 def env_keys(text: str) -> list[str]:
-    """Names from `NAME=value` lines; blank lines and `#` comments are skipped."""
-    keys: list[str] = []
-    for number, line in enumerate(text.splitlines(), start=1):
-        stripped = line.strip()
-        if not stripped or stripped.startswith("#"):
-            continue
-        name, sep, _ = stripped.partition("=")
-        if not sep or not _KEY.fullmatch(name):
-            raise ValueError(f"line {number} is not NAME=value")
-        if name in keys:
-            raise ValueError(f"duplicate key {name}")
-        keys.append(name)
-    return keys
+    return list(parse_env(text))
 
 
 def referenced_vars(text: str) -> set[str]:
@@ -134,10 +123,7 @@ def test_env_is_ignored_and_untracked() -> None:
     )
 
 
-def test_local_env_matches_env_example() -> None:
-    env = ROOT / ".env"
-    if not env.exists():
-        pytest.skip("no .env (CI)")
-    local = set(env_keys(env.read_text()))
+def test_local_env_matches_env_example(dotenv: dict[str, str]) -> None:
+    local = set(dotenv)
     message = drift(set(env_keys(EXAMPLE.read_text())), local, ".env")
     assert not message, message

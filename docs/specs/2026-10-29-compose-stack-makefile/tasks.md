@@ -2,7 +2,7 @@
 
 Spec: [spec.md](spec.md)
 
-- [ ] 1. **Gate:** add `--add-host=auth.localhost:host-gateway` to `runArgs` in
+- [x] 1. **Gate:** add `--add-host=auth.localhost:host-gateway` to `runArgs` in
       `.devcontainer/devcontainer.json`. Ask the user to rebuild the devcontainer, then check
       that `getent hosts auth.localhost` returns the host-gateway IP (AC 1). If it still
       returns loopback, stop and report: the hostname decision has to be revisited.
@@ -64,3 +64,7 @@ builds on AC 4.
 - **Timing:** `make init` and `make reset` each take about 1.5 minutes with warm images (the
   first pull took about 3.5 minutes).
 - **build-spec step 4** (alice/carol e2e) doesn't apply yet: there are no users, IdPs or `/api/*` routes.
+- **Task 1 (checked after the devcontainer rebuild, during the realm-keypairs build):**
+  `getent ahosts auth.localhost` returns only `172.17.0.1` (host-gateway), and httpx2 gets issuer
+  `http://auth.localhost:8080/realms/aloysius` from the devcontainer. Plain `curl` still connects
+  to loopback, because it resolves `*.localhost` itself and ignores `/etc/hosts`.
