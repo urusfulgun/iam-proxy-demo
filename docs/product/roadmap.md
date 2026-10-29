@@ -6,7 +6,7 @@ Sizes: S = under half a day, M = about a day, L = several days. Each item become
 
 ## Phase 1: Foundation
 - [x] S: uv project on Python 3.14 with a FastAPI `/health` route
-- [ ] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
+- [x] S: pytest, ruff and `mypy --strict` configured in `pyproject.toml`
 - [ ] S: CI workflow: `uv sync`, ruff, mypy, pytest, pip-audit on `uv.lock`
 - [ ] S: `.env.example` committed, `.env` git-ignored; CI check that both list the same variables
 - [ ] M: `docker-compose.yml`: postgres, keycloak (alias `auth.localhost`, bootstrap admin from `.env`, healthcheck on `:9000/health/ready`), one-shot keycloak-config, app

@@ -21,7 +21,7 @@ no database.
 - `make export` dumps the live realm config so you can copy it into `keycloak/realms/`
 - `uv sync` installs dependencies into `.venv`
 - `uv run pytest` runs the tests; for a single test, `uv run pytest path/to/test_x.py::test_name`
-- `uv run ruff check` lints and `ruff format` formats; `mypy --strict` type-checks
+- `uv run ruff check` lints and `uv run ruff format` formats; `uv run mypy` type-checks (strict, paths from `pyproject.toml`)
 
 ## Rules
 

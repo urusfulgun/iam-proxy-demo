@@ -55,9 +55,9 @@ Versions current as of 2026-10-29. Python packages are pinned in `uv.lock`, imag
 - **Why:** No browser download. Each SAML and OIDC hop is an explicit step in the test, so the test reads like the flow diagram and runs in seconds.
 
 ## Linting, formatting and type checking: ruff + mypy
-- **What:** `uv run ruff check`, `ruff format` and `mypy --strict`
-- **Version:** ruff 0.17, mypy 2.4
-- **Why:** Both are installed by the devcontainer and wired into VS Code (format on save, strict mypy). Strict typing catches claim-handling mistakes early.
+- **What:** `uv run ruff check`, `uv run ruff format` and `uv run mypy`, configured in `pyproject.toml` (ruff rules E, F, W, I, B, UP, SIM, S; mypy `strict` over `src` and `tests`)
+- **Version:** ruff 0.17, mypy 2.4, pinned in the `dev` dependency group
+- **Why:** Pinning them in the dev group means `uv run` uses the venv binaries, so mypy sees the project's packages and CI runs the same versions. The devcontainer also installs both globally for VS Code (format on save, strict mypy). Strict typing catches claim-handling mistakes early.
 
 ## Dependency audit: pip-audit
 - **What:** A blocking CI step that checks the locked dependencies against known vulnerabilities: `uv export --format requirements-txt --no-hashes | uvx pip-audit -r - --no-deps`
