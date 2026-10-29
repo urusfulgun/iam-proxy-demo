@@ -25,7 +25,7 @@ Spec: [spec.md](spec.md)
       in the output.
 - [x] 10. Update `docs/product/tech-stack.md` (keypair and testing sections) and tick the item in
       `docs/product/roadmap.md`.
-- [ ] 11. After the push, the PR's `check` run is green, with the `e2e` and local-`.env` tests
+- [x] 11. After the push, the PR's `check` run is green, with the `e2e` and local-`.env` tests
       skipped (AC 7).
 
 This item has no API access check, so it needs no passing/negative API test pair. The negative
@@ -64,3 +64,5 @@ yet: there are no IdPs, users or `/api/*` routes.
   Phase 2 home-fau IdP item, where the home clients turn off *Client signature required*.
 - **build-spec step 4** (alice/carol e2e) doesn't apply yet: there are no IdPs, users or `/api/*`
   routes.
+- **AC 7:** the `check` run on PR #17 was green, with the `e2e` and local-`.env` tests skipped
+  (confirmed by the user).
