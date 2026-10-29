@@ -58,3 +58,8 @@ Versions current as of 2026-10-29. Python packages are pinned in `uv.lock`, imag
 - **What:** `uv run ruff check`, `ruff format` and `mypy --strict`
 - **Version:** ruff 0.17, mypy 2.4
 - **Why:** Both are installed by the devcontainer and wired into VS Code (format on save, strict mypy). Strict typing catches claim-handling mistakes early.
+
+## Dependency audit: pip-audit
+- **What:** A blocking CI step that checks the locked dependencies against known vulnerabilities: `uv export --format requirements-txt --no-hashes | uvx pip-audit -r - --no-deps`
+- **Version:** Run via `uvx`; the exact version is pinned in the CI workflow
+- **Why:** The app's security rests on PyJWT, `cryptography` and Starlette, so a CVE in any of them matters. The dependency set is small, so the step takes seconds and rarely fails on something that isn't real. Image scanning (Trivy) waits until there is an app image: the upstream Keycloak and Postgres images are pinned and their findings can't be fixed here.
