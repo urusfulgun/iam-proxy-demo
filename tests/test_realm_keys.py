@@ -19,7 +19,7 @@ from cryptography.hazmat.primitives import hashes, serialization
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.x509.oid import NameOID
 
-from tests.conftest import KEYCLOAK
+from tests.conftest import KEYCLOAK, admin_token
 
 ROOT = Path(__file__).resolve().parent.parent
 REALMS = ROOT / "keycloak/realms"
@@ -321,20 +321,6 @@ def test_jwks_has_only_pinned_rs256_key(realm: str, dotenv: dict[str, str]) -> N
     assert [k["x5c"][0] for k in rs256] == [dotenv[f"{HOMES[realm]}_SAML_CERT"]], (
         f"{realm}: JWKS has {len(rs256)} RS256 sig key(s), want only the pinned one"
     )
-
-
-def admin_token(env: dict[str, str]) -> str:
-    response = httpx2.post(
-        f"{KEYCLOAK}/realms/master/protocol/openid-connect/token",
-        data={
-            "grant_type": "password",
-            "client_id": "admin-cli",
-            "username": env["KC_BOOTSTRAP_ADMIN_USERNAME"],
-            "password": env["KC_BOOTSTRAP_ADMIN_PASSWORD"],
-        },
-    )
-    token: str = response.raise_for_status().json()["access_token"]
-    return token
 
 
 @pytest.mark.e2e

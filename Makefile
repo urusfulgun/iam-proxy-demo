@@ -1,18 +1,29 @@
 .DEFAULT_GOAL := help
-.PHONY: help init keys up down logs apply export reset
+.PHONY: help init secrets keys up down logs apply export reset
 
 COMPOSE := docker compose
 
 help: ## List targets
 	@grep -E '^[a-z]+:.*## ' $(MAKEFILE_LIST) | awk -F ':.*## ' '{printf "  %-8s %s\n", $$1, $$2}'
 
-init: .env keys up ## Create .env if missing, fill in keypairs, then start the stack
+init: .env secrets keys up ## Create .env if missing, fill in secrets and keypairs, then start the stack
 
 # Never overwrites an existing .env, so secrets survive `make reset`.
 .env:
 	cp .env.example .env
-	sed -i "s/^KC_BOOTSTRAP_ADMIN_PASSWORD=$$/&$$(openssl rand -hex 24)/" .env
-	sed -i "s/^POSTGRES_PASSWORD=$$/&$$(openssl rand -hex 24)/" .env
+
+# NAME:bytes of `openssl rand -hex`. The demo password is short enough to type in a browser.
+SECRETS := KC_BOOTSTRAP_ADMIN_PASSWORD:24 POSTGRES_PASSWORD:24 DEMO_USER_PASSWORD:6
+
+secrets: .env ## Generate any password that .env lacks or leaves empty
+	@for entry in $(SECRETS); do \
+	  name=$${entry%%:*}; \
+	  if grep -q "^$$name=." .env; then continue; fi; \
+	  value=$$(openssl rand -hex $${entry#*:}); \
+	  if grep -q "^$$name=" .env; then sed -i "s|^$$name=.*|$$name=$$value|" .env; \
+	  else echo "$$name=$$value" >> .env; fi; \
+	  echo "secrets: generated $$name"; \
+	done
 
 # One pinned SAML signing keypair per home realm, written as one-line base64 bodies (no PEM
 # header). A pair is regenerated only if its key or cert is empty or missing; values are never
